@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <style>
+        .row {
+            margin-top: 20px
+        }
+
+        #alertSuccess {
+            display: none
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <h1>My Message</h1>
+            <form class="form-horizontal col-sm-6">
+                <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label">姓名</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="username" class="form-control" id="username" placeholder="姓名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="message">留言</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control col-sm-10" name="message" rows="3" id="message"></textarea>
+                    </div>
+                </div>
+                <button type="button" id="butt" class="btn btn-success col-sm-offset-2">提交</button>
+                <button type="button" id="aaa" class="btn btn-success col-sm-offset-2">aaa</button>
+
+            </form>
+        </div>
+        <div class="row">
+            <div id='alertSuccess' class="alert alert-success col-sm-6" role="alert">
+                <a href="#" class="alert-link">表单提交成功</a>
+            </div>
+        </div>
+        <div class="row">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <% for(let i=1; i<=pageAmount; i++) {%>
+                        <li class="page">
+                            <a href="#">
+                                <%= i%>
+                            </a>
+                        </li>
+                        <% }%>
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="row" id="liuyanqu">
+            <h2>liuyanqu</h2>
+            <hr>
+        </div>
+        <script type="text/template" id="temp">
+            <div class="liuyanqu">
+                <p>【姓名】${ name }</p>
+                <p>【留言】 ${ msg } </p>
+                <p>【时间】2017.2.3</p>
+                <a href="#">删除</a>
+                <hr>
+            </div>
+        </script>
+    </div>
+    <script src="/js/lodash.js"></script>
+    <script src="/js/jquery-3.2.1.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script>
+        $('.page').eq(0).addClass('active')
+        // let butt = document.getElementsByTagName('button')[0];
+        // butt.onclick = () => {
+        //     document.getElementsByClassName('alert-success')[0].style.display = 'none';
+        // };
+
+
+        $('#butt').click(function () {
+            $.post('/submit', {
+                name: $('#username').val(),
+                msg: $('#message').val()
+            }, function () {
+                // alert(3)
+                $('#alertSuccess').fadeIn()
+            })
+        });
+        $('#aaa').click(() => {
+            $('#alertSuccess').fadeIn()
+            
+        })
+        // alert(a);
+        // getAllmsg(1)
+
+        (function getAllmsg(page) {
+            $.get('/du?page=' + page, function (data) {
+                let temp = $('#temp').html();
+                let compiled = _.template(temp);
+                console.log(data)
+                for (let i = 0; i < data.docs.length; i++) {
+                    let html = compiled({
+                        'name': data.docs[i].name,
+                        'msg': data.docs[i].msg
+                    });
+                    $('#liuyanqu').append(html);
+
+                }
+            })
+        }(1))
+    </script>
+</body>
+
+</html>
+
+<!-- <hr>
+                    <div class="liuyanqu">
+                        <p>【姓名】付强</p>
+                        <p>【留言】很好吃</p>
+                        <p>【时间】2017.2.3</p>
+                        <a href="#">删除</a>
+                    </div>
+                    <hr>
+                    <div class="liuyanqu">
+                        <p>【姓名】付强</p>
+                        <p>【留言】很好吃</p>
+                        <p>【时间】2017.2.3</p>
+                        <a href="#">删除</a>
+                    </div>
+                    <hr> -->
