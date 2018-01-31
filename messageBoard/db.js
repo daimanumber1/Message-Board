@@ -91,7 +91,7 @@ module.exports.find = function (collectionName, json, callback) {
         let col = db.collection(collectionName);
         skipNumber = json.skipNumber || 0;
         limitNumber = json.limitNumber || 0;
-        col.find({}).skip(skipNumber).limit(limitNumber).toArray((err, docs) => {
+        col.find({}).skip(skipNumber).sort({"_id":-1}).limit(limitNumber).toArray((err, docs) => {
             callback(docs);
             client.close();
         });

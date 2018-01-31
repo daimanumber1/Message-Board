@@ -68,9 +68,10 @@
                 </ul>
             </nav>
         </div>
+        <h2>liuyanqu</h2>
+        <hr>
         <div class="row" id="liuyanqu">
-            <h2>liuyanqu</h2>
-            <hr>
+
         </div>
         <script type="text/template" id="temp">
             <div class="liuyanqu">
@@ -99,17 +100,23 @@
                 msg: $('#message').val()
             }, function () {
                 // alert(3)
-                $('#alertSuccess').fadeIn()
+                $('#alertSuccess').fadeIn();
+                let compiled = _.template($('#temp').html());
+                let html = compiled({
+                    'name': $('#username').val(),
+                    'msg': $('#message').val()
+                });
+                $('#liuyanqu').prepend(html)
             })
         });
         $('#aaa').click(() => {
             $('#alertSuccess').fadeIn()
-            
+
         })
         // alert(a);
-        // getAllmsg(1)
+        getAllmsg(1)
 
-        (function getAllmsg(page) {
+        function getAllmsg(page) {
             $.get('/du?page=' + page, function (data) {
                 let temp = $('#temp').html();
                 let compiled = _.template(temp);
@@ -123,7 +130,7 @@
 
                 }
             })
-        }(1))
+        }
     </script>
 </body>
 
